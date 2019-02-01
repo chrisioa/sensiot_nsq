@@ -48,8 +48,8 @@ class Services:
             threads = []
             local_configuration = self.__get_local_configuration()
 
-            message_queue = Queue(maxsize=10)
-            meta_queue = Queue(maxsize=10)
+            message_queue = Queue(maxsize=0)
+            meta_queue = Queue(maxsize=0)
 
             socket_reader = SocketReader("SocketReader", self.event, message_queue)
             meta_data_appender = MetaDataAppender("MetaData", self.event, message_queue, meta_queue, local_configuration)
@@ -108,7 +108,7 @@ class Services:
             from memcache.writer.sensor_data import SensorDataWriter
             threads = []
 
-            sensor_data_queue = Queue(maxsize=10)
+            sensor_data_queue = Queue(maxsize=0)
 
             nsq_reader = NsqReader("SensorData_Memcache_NsqReader", self.event, sensor_data_queue, self.config['services']['nsq'], channel="memcache_sensor_data")
             sensor_data_memcache_writer = SensorDataWriter("SensorData_Memcache_Writer", self.event, sensor_data_queue, self.config['services']['memcached'])
@@ -127,7 +127,7 @@ class Services:
             from databases.influxdb.influxdb_writer import InfluxDBWriter
             threads = []
 
-            influxdb_queue = Queue(maxsize=10)
+            influxdb_queue = Queue(maxsize=0)
 
             nsq_reader = NsqReader("InfluxDB_NsqReader", self.event, influxdb_queue, self.config['services']['nsq'], channel="influxdb_writer")
             influxdb_writer = InfluxDBWriter("InfluxDB_Writer", self.event, influxdb_queue, self.config['services']['influxdb_writer'])
@@ -146,7 +146,7 @@ class Services:
             from databases.prometheus.prometheus_writer import PrometheusWriter
             threads = []
 
-            prometheus_queue = Queue(maxsize=10)
+            prometheus_queue = Queue(maxsize=0)
 
             nsq_reader = NsqReader("Prometheus_NsqReader", self.event, prometheus_queue, self.config['services']['nsq'], channel="prometheus_writer")
             prometheus_writer = PrometheusWriter("Prometheus_Writer", self.event, prometheus_queue, self.config['services']['prometheus_writer'])
@@ -182,7 +182,7 @@ class Services:
         threads = []
 
         sensor_data_queue = Queue()
-        sensor_list_queue = Queue(maxsize=10)
+        sensor_list_queue = Queue(maxsize=0)
 
         nsq_reader = NsqReader("SensorListCreator_NsqReader", self.event, sensor_data_queue, self.config['services']['nsq'], channel="memcache_sensorlist")
         sensor_list_creator = SensorListCreator("SensorListCreator", self.event, sensor_data_queue, sensor_list_queue, self.config['services']['sensorlist'])
