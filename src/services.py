@@ -72,7 +72,7 @@ class Services:
             threads = []
             type = os.environ['TYPE']
 
-            sensor_queue = Queue(maxsize=10)
+            sensor_queue = Queue(maxsize=0)
 
             if type == "ash2200":
                 from sensors.temperature_humidity.ash2200 import ASH2200, USBSerial
